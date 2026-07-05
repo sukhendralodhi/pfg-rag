@@ -1,4 +1,5 @@
 import type { Request, Response } from "express";
+import pdfService from "../services/pdf.service.js";
 
 
 export const uploadPdf = async (
@@ -12,6 +13,9 @@ export const uploadPdf = async (
                 message: "PDF file is required",
             });
         }
+
+        const documents = await pdfService.load(req.file.path);
+
         return res.status(201).json({
             success: true,
             message: "PDF uploaded successfully",
@@ -19,9 +23,11 @@ export const uploadPdf = async (
                 filename: req.file.filename,
                 originalName: req.file.originalname,
                 size: req.file.size,
-                path: req.file.path,
             },
+            pages: documents.length,
+            documents
         });
+
     } catch (error) {
         console.error(error);
         return res.status(500).json({
