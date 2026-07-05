@@ -1,7 +1,5 @@
 import type { Request, Response } from "express";
-import chunkService from "../services/chunk.service.js";
-import pdfService from "../services/pdf.service.js";
-import embeddingService from "../services/embedding.service.js";
+import documentIndexService from "../services/document-index.service.js";
 
 
 export const uploadPdf = async (
@@ -16,24 +14,57 @@ export const uploadPdf = async (
             });
         }
 
-        const documents = await pdfService.load(req.file.path);
+        // const documents = await pdfService.load(req.file.path);
 
         // split into chunks 
-        const chunks = await chunkService.split(documents);
-        const embeddings = await embeddingService.embedDocuments(chunks);
+        // const chunks = await chunkService.split(documents);
+        // const embeddings = await embeddingService.embedDocuments(chunks);
+        // const vectorStore = await vectorService.indexDocuments(
+        //     chunks,
+        //     "my-pdf-docs"
+        // );
+
+        const result = await documentIndexService.index(
+            req.file.path,
+        )
+
+        // return res.status(201).json({
+        //     success: true,
+        //     message: "PDF uploaded successfully",
+        //     file: {
+        //         filename: req.file.filename,
+        //         originalName: req.file.originalname,
+        //         size: req.file.size,
+        //     },
+        //     totalPages: documents.length,
+        //     totalChunks: chunks.length,
+        //     collection: "my-pdf-docs"
+        //     // totalEmbeddings: embeddings.length,
+        //     // embeddingDimension: embeddings[0]?.length,
+        // });
 
         return res.status(201).json({
+
             success: true,
-            message: "PDF uploaded successfully",
+
+            message:
+                "PDF indexed successfully.",
+
             file: {
-                filename: req.file.filename,
-                originalName: req.file.originalname,
-                size: req.file.size,
+
+                filename:
+                    req.file.filename,
+
+                originalName:
+                    req.file.originalname,
+
+                size:
+                    req.file.size,
+
             },
-            totalPages: documents.length,
-            totalChunks: chunks.length,
-            totalEmbeddings: embeddings.length,
-            embeddingDimension: embeddings[0]?.length,
+
+            ...result,
+
         });
 
     } catch (error) {
