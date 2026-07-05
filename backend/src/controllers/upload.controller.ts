@@ -1,5 +1,7 @@
 import type { Request, Response } from "express";
+import chunkService from "../services/chunk.service.js";
 import pdfService from "../services/pdf.service.js";
+import embeddingService from "../services/embedding.service.js";
 
 
 export const uploadPdf = async (
@@ -16,6 +18,10 @@ export const uploadPdf = async (
 
         const documents = await pdfService.load(req.file.path);
 
+        // split into chunks 
+        const chunks = await chunkService.split(documents);
+        const embeddings = await embeddingService.embedDocuments(chunks);
+
         return res.status(201).json({
             success: true,
             message: "PDF uploaded successfully",
@@ -24,8 +30,10 @@ export const uploadPdf = async (
                 originalName: req.file.originalname,
                 size: req.file.size,
             },
-            pages: documents.length,
-            documents
+            totalPages: documents.length,
+            totalChunks: chunks.length,
+            totalEmbeddings: embeddings.length,
+            embeddingDimension: embeddings[0]?.length,
         });
 
     } catch (error) {
