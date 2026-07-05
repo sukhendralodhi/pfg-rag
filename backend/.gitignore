@@ -1,0 +1,58 @@
+# Dependency directories
+node_modules/
+jspm_packages/
+web_modules/
+
+# Local env files (SECRET KEYS - NEVER COMMIT THESE)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Diagnostic reports
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Directory for instrumented code coverage downloads
+coverage
+*.lcov
+
+# Caches (Eslint, Next.js, Babel, etc.)
+.eslintcache
+.cache/
+.next/
+.nuxt/
+
+# Build outputs (If you use TypeScript or Build tools)
+dist/
+build/
+out/
+
+# IDE / System files
+.DS_Store
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Project-specific uploads folder
+# This ignores all files inside src/uploads, but keeps the folder itself
+src/uploads/*
+!.gitkeep
